@@ -1,0 +1,42 @@
+# Dataset (too large for Git)
+Prototype_Phase/design
+
+# Python virtual environment
+Prototype_Phase/venv
+
+# YOLOv5 repository (cloned dependency)
+Prototype_Phase/yolov5
+
+# Exception: Keep training results
+!Prototype_Phase/yolov5/runs/
+!Prototype_Phase/yolov5/runs/train/
+!Prototype_Phase/yolov5/runs/train/food_model/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb.backup
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

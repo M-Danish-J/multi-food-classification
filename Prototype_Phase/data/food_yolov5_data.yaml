@@ -1,0 +1,24 @@
+# YOLOv5 Food Classification Dataset Configuration
+# This file defines the dataset structure for training
+
+# Dataset root directory (absolute path)
+path: /home/danish/University/FYP/multi-food-classification/Prototype_Phase
+
+# Relative paths from 'path' to train/val/test image directories
+train: design/Train_Set/images
+val: design/Test_Set/images
+test: design/Test_Set/images
+
+# Number of classes
+nc: 8
+
+# Class names
+names:
+  - chicken
+  - daal
+  - mixsweet
+  - naan
+  - rice
+  - roti
+  - salad
+  - yogurt
