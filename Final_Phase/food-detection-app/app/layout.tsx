@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -8,9 +9,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Multi-Food Detection System",
+  title: "Multi-Food Detection System | AI-Powered Food Recognition",
   description:
-    "YOLOv5-powered food detection and classification system. Detect and classify multiple food items in real-time.",
+    "YOLOv5-powered food detection and classification system. Detect and classify multiple food items in real-time with 78.1% precision.",
+  icons: {
+    icon: "/food-logo.png",
+    apple: "/food-logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -19,9 +24,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

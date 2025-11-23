@@ -1,14 +1,25 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { ImageUpload } from "@/components/ImageUpload";
 import { DetectionCanvas } from "@/components/DetectionCanvas";
 import { DetectionResults } from "@/components/DetectionResults";
+import { SampleSelector } from "@/components/SampleSelector";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { detectFood, loadModel } from "@/lib/model";
 import type { DetectionResult } from "@/lib/types";
-import { Loader2, RotateCcw, Sparkles, Info } from "lucide-react";
+import {
+  Loader2,
+  RotateCcw,
+  Sparkles,
+  Info,
+  ArrowRight,
+  Zap,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Home() {
@@ -27,6 +38,13 @@ export default function Home() {
     setError("");
   }, []);
 
+  const handleSampleSelected = useCallback(async (sampleUrl: string) => {
+    setImageUrl(sampleUrl);
+    setImageFile(null);
+    setResult(null);
+    setError("");
+  }, []);
+
   const handleDetect = useCallback(async () => {
     if (!imageUrl) return;
 
@@ -35,19 +53,16 @@ export default function Home() {
     setError("");
 
     try {
-      // Load model first
       await loadModel();
       setIsModelLoading(false);
 
-      // Create image element
-      const img = new Image();
+      const img = document.createElement("img") as HTMLImageElement;
       img.src = imageUrl;
       await new Promise((resolve, reject) => {
         img.onload = resolve;
         img.onerror = reject;
       });
 
-      // Run detection
       const detectionResult = await detectFood(img);
       setResult(detectionResult);
     } catch (err) {
@@ -70,27 +85,46 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
-      {/* Header */}
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-gradient-to-br from-primary to-accent p-3 shadow-lg">
-              <Sparkles className="h-7 w-7 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Multi-Food Detection
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                YOLOv5-powered food classification system
-              </p>
+      {/* Enhanced Header */}
+      <motion.header
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ type: "spring", stiffness: 100 }}
+        className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 shadow-sm"
+      >
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-3 group">
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                className="rounded-xl bg-gradient-to-br from-primary to-accent p-3 shadow-lg"
+              >
+                <Sparkles className="h-6 w-6 text-white" />
+              </motion.div>
+              <div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  FoodScan
+                </h1>
+                <p className="text-xs text-muted-foreground">
+                  AI-Powered Recognition
+                </p>
+              </div>
+            </Link>
+            <div className="flex items-center gap-3">
+              <Link href="/about">
+                <Button variant="ghost" size="sm" className="hidden sm:flex">
+                  About
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <ThemeToggle />
             </div>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12 max-w-7xl">
+      <main className="container mx-auto px-4 py-8 md:py-12 max-w-7xl">
         <AnimatePresence mode="wait">
           {!imageUrl ? (
             <motion.div
@@ -99,37 +133,141 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
+              className="space-y-8"
             >
-              {/* Info Card */}
-              <Card className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-900">
-                <div className="flex gap-4">
-                  <div className="rounded-full bg-blue-100 dark:bg-blue-900 p-3 h-fit">
-                    <Info className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="font-semibold text-blue-900 dark:text-blue-100">
-                      How it works
-                    </h3>
-                    <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                      <li>✨ Upload an image containing food items</li>
-                      <li>
-                        🔍 Our YOLOv5 model detects and classifies up to 8 food
-                        types
-                      </li>
-                      <li>📊 View detection results with confidence scores</li>
-                      <li>
-                        🎯 Detectable foods: Chicken, Daal, Mixsweet, Naan,
-                        Rice, Roti, Salad, Yogurt
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </Card>
+              {/* Hero Section */}
+              <div className="text-center space-y-4 py-8">
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                  className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4"
+                >
+                  <Zap className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium">
+                    Powered by YOLOv5 AI
+                  </span>
+                </motion.div>
 
-              <ImageUpload
-                onImageSelected={handleImageSelected}
-                disabled={isLoading}
-              />
+                <motion.h1
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient"
+                >
+                  Detect Food Instantly
+                </motion.h1>
+
+                <motion.p
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
+                >
+                  Upload an image and let our AI identify multiple food items
+                  with impressive accuracy
+                </motion.p>
+              </div>
+
+              {/* Info Card */}
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-900">
+                  <div className="flex gap-4">
+                    <div className="rounded-full bg-blue-100 dark:bg-blue-900 p-3 h-fit">
+                      <Info className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div className="space-y-2 flex-1">
+                      <h3 className="font-semibold text-blue-900 dark:text-blue-100">
+                        How it works
+                      </h3>
+                      <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                        <li className="flex items-center gap-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                          Upload an image or try a sample
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                          Our YOLOv5 AI detects up to 8 food types
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                          View results with bounding boxes and confidence scores
+                        </li>
+                      </ul>
+                      <div className="pt-2">
+                        <p className="text-xs text-blue-700 dark:text-blue-300 font-medium">
+                          Detectable: Chicken • Daal • Mixsweet • Naan • Rice •
+                          Roti • Salad • Yogurt
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </motion.div>
+
+              {/* Upload Section */}
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <ImageUpload
+                  onImageSelected={handleImageSelected}
+                  disabled={isLoading}
+                />
+              </motion.div>
+
+              {/* Sample Selector */}
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              >
+                <SampleSelector
+                  onSampleSelected={handleSampleSelected}
+                  disabled={isLoading}
+                />
+              </motion.div>
+
+              {/* Features Grid */}
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.7 }}
+                className="grid md:grid-cols-3 gap-4 pt-8"
+              >
+                <Card className="p-6 text-center hover:shadow-lg transition-shadow">
+                  <div className="rounded-full bg-primary/10 p-3 w-fit mx-auto mb-3">
+                    <Sparkles className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold mb-2">78.1% Precision</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Highly accurate food detection
+                  </p>
+                </Card>
+                <Card className="p-6 text-center hover:shadow-lg transition-shadow">
+                  <div className="rounded-full bg-primary/10 p-3 w-fit mx-auto mb-3">
+                    <Zap className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Real-Time</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Results in under 500ms
+                  </p>
+                </Card>
+                <Card className="p-6 text-center hover:shadow-lg transition-shadow">
+                  <div className="rounded-full bg-primary/10 p-3 w-fit mx-auto mb-3">
+                    <Info className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Privacy First</h3>
+                  <p className="text-sm text-muted-foreground">
+                    All processing in browser
+                  </p>
+                </Card>
+              </motion.div>
             </motion.div>
           ) : (
             <motion.div
@@ -138,25 +276,25 @@ export default function Home() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="space-y-8"
+              className="space-y-6"
             >
               {/* Action Buttons */}
-              <div className="flex gap-4 justify-center">
+              <div className="flex gap-3 justify-center flex-wrap">
                 {!result && (
                   <Button
                     onClick={handleDetect}
                     disabled={isLoading}
                     size="lg"
-                    className="shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+                    className="shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 gap-2"
                   >
                     {isLoading ? (
                       <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        <Loader2 className="h-5 w-5 animate-spin" />
                         {isModelLoading ? "Loading Model..." : "Detecting..."}
                       </>
                     ) : (
                       <>
-                        <Sparkles className="mr-2 h-5 w-5" />
+                        <Sparkles className="h-5 w-5" />
                         Detect Food Items
                       </>
                     )}
@@ -166,24 +304,36 @@ export default function Home() {
                   onClick={handleReset}
                   variant="outline"
                   size="lg"
-                  className="shadow hover:shadow-lg transition-all duration-200"
+                  className="shadow hover:shadow-lg transition-all duration-200 gap-2"
                 >
-                  <RotateCcw className="mr-2 h-5 w-5" />
+                  <RotateCcw className="h-5 w-5" />
                   Upload New Image
                 </Button>
               </div>
 
               {/* Error Display */}
-              {error && (
-                <Card className="p-6 bg-destructive/10 border-destructive/20">
-                  <p className="text-destructive font-medium">{error}</p>
-                </Card>
-              )}
+              <AnimatePresence>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                  >
+                    <Card className="p-6 bg-destructive/10 border-destructive/20">
+                      <p className="text-destructive font-medium">{error}</p>
+                    </Card>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Results Grid */}
-              <div className="grid lg:grid-cols-2 gap-8">
+              <div className="grid lg:grid-cols-2 gap-6">
                 {/* Image with Detections */}
-                <div className="space-y-4">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="space-y-4"
+                >
                   <h2 className="text-2xl font-semibold">Detection Result</h2>
                   {result ? (
                     <DetectionCanvas
@@ -213,10 +363,14 @@ export default function Home() {
                       )}
                     </div>
                   )}
-                </div>
+                </motion.div>
 
                 {/* Results Panel */}
-                <div className="space-y-4">
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="space-y-4"
+                >
                   <h2 className="text-2xl font-semibold">Analysis</h2>
                   {result ? (
                     <DetectionResults
@@ -224,7 +378,7 @@ export default function Home() {
                       inferenceTime={result.inferenceTime}
                     />
                   ) : (
-                    <Card className="p-8 h-full flex items-center justify-center">
+                    <Card className="p-8 h-full flex items-center justify-center min-h-[400px]">
                       <div className="text-center space-y-3">
                         <div className="rounded-full bg-muted p-6 inline-block">
                           <Sparkles className="h-12 w-12 text-muted-foreground" />
@@ -235,23 +389,41 @@ export default function Home() {
                       </div>
                     </Card>
                   )}
-                </div>
+                </motion.div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </main>
 
-      {/* Footer */}
+      {/* Enhanced Footer */}
       <footer className="border-t mt-20 py-8 bg-muted/30">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>
-            Multi-Food Detection System • Powered by YOLOv5 • CS619 Spring 2025
-          </p>
-          <p className="mt-2">
-            Best Model: Hybrid (60 epochs, batch 12) • 78.1% Precision • 76.1%
-            mAP@0.5
-          </p>
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+            <div className="text-center md:text-left">
+              <p className="font-medium">Multi-Food Detection System</p>
+              <p className="text-xs mt-1">CS619 Spring 2025 • YOLOv5 AI</p>
+            </div>
+            <div className="flex items-center gap-6">
+              <Link
+                href="/about"
+                className="hover:text-foreground transition-colors"
+              >
+                About
+              </Link>
+              <a
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+              >
+                GitHub
+              </a>
+              <span className="text-xs">
+                Best Model: 78.1% Precision • 76.1% mAP@0.5
+              </span>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
