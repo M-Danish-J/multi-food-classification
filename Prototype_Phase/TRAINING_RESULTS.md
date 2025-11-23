@@ -1,14 +1,31 @@
-# YOLOv5 Food Classification - Training Results
+# YOLOv5 Food Classification - Training Results (Baseline Model)
+
+> [!NOTE]
+> This document contains results for the **baseline training run**. For a comparison with the fine-tuned model, see [FINE_TUNED_COMPARISON.md](FINE_TUNED_COMPARISON.md).
 
 ## Training Summary
 
 **Training Completed**: November 22, 2025  
 **Duration**: 4.466 hours (4 hours 28 minutes)  
-**Epochs**: 50  
-**Device**: CPU (Intel i7 11th Gen)  
-**Model**: YOLOv5s  
-**Dataset**: 348 training images, 88 validation images  
-**Classes**: 8 (chicken, daal, mixsweet, naan, rice, roti, salad, yogurt)
+**Model Name**: `food_model`
+
+### Training Parameters
+
+| Parameter      | Value                   |
+| -------------- | ----------------------- |
+| **Epochs**     | 50                      |
+| **Batch Size** | 16                      |
+| **Image Size** | 640                     |
+| **Model**      | YOLOv5s                 |
+| **Weights**    | yolov5s.pt (pretrained) |
+| **Device**     | CPU (Intel i7 11th Gen) |
+| **Cache**      | Enabled                 |
+
+### Dataset
+
+- **Training Images**: 348
+- **Validation Images**: 88
+- **Classes**: 8 (chicken, daal, mixsweet, naan, rice, roti, salad, yogurt)
 
 ---
 
