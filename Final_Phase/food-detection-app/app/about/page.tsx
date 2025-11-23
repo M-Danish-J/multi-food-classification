@@ -265,7 +265,7 @@ export default function AboutPage() {
             </Link>
             <Button size="lg" variant="outline" className="gap-2" asChild>
               <a
-                href="https://github.com"
+                href="https://github.com/M-Danish-J/multi-food-classification"
                 target="_blank"
                 rel="noopener noreferrer"
               >

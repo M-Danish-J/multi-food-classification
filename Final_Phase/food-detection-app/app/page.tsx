@@ -110,11 +110,15 @@ export default function Home() {
                 </p>
               </div>
             </Link>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3">
               <Link href="/about">
-                <Button variant="ghost" size="sm" className="hidden sm:flex">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs md:text-sm"
+                >
                   About
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-1 md:ml-2 h-3 w-3 md:h-4 md:w-4" />
                 </Button>
               </Link>
               <ThemeToggle />
@@ -175,31 +179,31 @@ export default function Home() {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-900">
-                  <div className="flex gap-4">
-                    <div className="rounded-full bg-blue-100 dark:bg-blue-900 p-3 h-fit">
-                      <Info className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <Card className="p-4 md:p-6 bg-gradient-to-r from-green-50 to-yellow-50 dark:from-green-950/20 dark:to-yellow-950/20 border-green-200 dark:border-green-900">
+                  <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                    <div className="rounded-full bg-green-100 dark:bg-green-900 p-2.5 md:p-3 h-fit mx-auto sm:mx-0">
+                      <Info className="h-4 w-4 md:h-5 md:w-5 text-green-600 dark:text-green-400" />
                     </div>
-                    <div className="space-y-2 flex-1">
-                      <h3 className="font-semibold text-blue-900 dark:text-blue-100">
+                    <div className="space-y-2 flex-1 text-center sm:text-left">
+                      <h3 className="font-semibold text-sm md:text-base text-green-900 dark:text-green-100">
                         How it works
                       </h3>
-                      <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                        <li className="flex items-center gap-2">
-                          <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                          Upload an image or try a sample
+                      <ul className="text-xs md:text-sm text-green-800 dark:text-green-200 space-y-1.5">
+                        <li className="flex items-center gap-2 justify-center sm:justify-start">
+                          <span className="h-1.5 w-1.5 rounded-full bg-green-600 flex-shrink-0" />
+                          <span>Upload an image or try a sample</span>
                         </li>
-                        <li className="flex items-center gap-2">
-                          <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                          Our YOLOv5 AI detects up to 8 food types
+                        <li className="flex items-center gap-2 justify-center sm:justify-start">
+                          <span className="h-1.5 w-1.5 rounded-full bg-green-600 flex-shrink-0" />
+                          <span>Our YOLOv5 AI detects up to 8 food types</span>
                         </li>
-                        <li className="flex items-center gap-2">
-                          <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                          View results with bounding boxes and confidence scores
+                        <li className="flex items-center gap-2 justify-center sm:justify-start">
+                          <span className="h-1.5 w-1.5 rounded-full bg-green-600 flex-shrink-0" />
+                          <span>View results with bounding boxes</span>
                         </li>
                       </ul>
                       <div className="pt-2">
-                        <p className="text-xs text-blue-700 dark:text-blue-300 font-medium">
+                        <p className="text-xs text-green-700 dark:text-green-300 font-medium">
                           Detectable: Chicken • Daal • Mixsweet • Naan • Rice •
                           Roti • Salad • Yogurt
                         </p>
@@ -397,14 +401,14 @@ export default function Home() {
       </main>
 
       {/* Enhanced Footer */}
-      <footer className="border-t mt-20 py-8 bg-muted/30">
+      <footer className="border-t mt-20 py-6 md:py-8 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <div className="text-center md:text-left">
+          <div className="flex flex-col items-center gap-3 md:gap-4 text-xs md:text-sm text-muted-foreground">
+            <div className="text-center">
               <p className="font-medium">Multi-Food Detection System</p>
               <p className="text-xs mt-1">CS619 Spring 2025 • YOLOv5 AI</p>
             </div>
-            <div className="flex items-center gap-6">
+            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6">
               <Link
                 href="/about"
                 className="hover:text-foreground transition-colors"
@@ -412,14 +416,14 @@ export default function Home() {
                 About
               </Link>
               <a
-                href="https://github.com"
+                href="https://github.com/M-Danish-J/multi-food-classification"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors"
               >
                 GitHub
               </a>
-              <span className="text-xs">
+              <span className="text-xs hidden sm:inline">
                 Best Model: 78.1% Precision • 76.1% mAP@0.5
               </span>
             </div>
