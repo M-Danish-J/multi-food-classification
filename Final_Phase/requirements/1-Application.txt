@@ -1,0 +1,2 @@
+Final application shall contain complete application code and any other
+important file.
