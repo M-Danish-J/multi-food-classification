@@ -36,6 +36,12 @@ export default function Home() {
     setImageUrl(url);
     setResult(null);
     setError("");
+
+    // Scroll to top smoothly when image is uploaded
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, []);
 
   const handleSampleSelected = useCallback(async (sampleUrl: string) => {
@@ -43,6 +49,12 @@ export default function Home() {
     setImageFile(null);
     setResult(null);
     setError("");
+
+    // Scroll to top smoothly on mobile when image is selected
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, []);
 
   const handleDetect = useCallback(async () => {
@@ -283,7 +295,7 @@ export default function Home() {
               className="space-y-6"
             >
               {/* Action Buttons */}
-              <div className="flex gap-3 justify-center flex-wrap">
+              <div className="flex gap-3 justify-center flex-wrap pt-6 md:pt-0 scroll-mt-20">
                 {!result && (
                   <Button
                     onClick={handleDetect}
